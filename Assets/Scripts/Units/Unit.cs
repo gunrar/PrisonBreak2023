@@ -4,7 +4,6 @@ public class Unit : MonoBehaviour
 {
     public float health = 100f;
     public float moveSpeed = 5f;
-    public float rotationSpeed = 90f;
 
     protected Rigidbody2D rb;
 
@@ -15,9 +14,6 @@ public class Unit : MonoBehaviour
 
     protected virtual void Move(Vector2 direction)
     {
-
-
-
         rb.position += direction;
         //rb.velocity = direction; // Use Rigidbody2D for movement
     }

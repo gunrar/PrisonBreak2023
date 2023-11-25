@@ -1,10 +1,14 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : Munition
 {
+    public float bulletLifetime;
 
-
-
+    public void Start()
+    {
+        StartCoroutine(TimeOut());
+    }
     // Rest of your bullet code, such as collision detection
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
@@ -26,4 +30,12 @@ public class Bullet : Munition
             Destroy(gameObject); // Destroy the bullet after it hits
         }
     }
+
+    IEnumerator TimeOut()
+    {
+        yield return new WaitForSeconds(bulletLifetime);
+        Destroy(gameObject);
+    }
+
+    
 }

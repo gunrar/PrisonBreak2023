@@ -40,10 +40,10 @@ public class Enemy : Unit
     }
     protected virtual void Update()
     {
-        
-
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
+        float distanceToPlayer = 0;
+        if (playerTransform != null) { 
+            distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        }
         if (distanceToPlayer <= targetingRange)
         {
             // Player within targeting range, move towards the player
