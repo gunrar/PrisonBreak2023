@@ -5,17 +5,23 @@ using Photon.Pun;
 public class PlayerControllerNetworked : Unit
 {
 
-    public float distanceThreshold;
     PhotonView view;
 
-    public GameObject otherPlayer;
-    private bool distanceExceeded = false;
+    public float stamina = 100f;
+    public float exhaustDrainModifier = 3f;
+    public float moveSpeedStart = 0f;
+    public float exhaustRecoveryTime = 3f;
+    public float staminaUsageCoefficient = 10f;
+    public float frictionCoefficient = 10f;
+    public float friction2Coefficient = 1f;
+    public float avoidDist = 0.5f;
+
+
     void FixedUpdate()
     {
         if (view.IsMine)
         {
-            LimitMovement();
-            HandleStamina();
+            //HandleStamina();
             HandleMovement();
         }
 
@@ -26,7 +32,6 @@ public class PlayerControllerNetworked : Unit
         moveSpeedStart = moveSpeed;
         view = GetComponent<PhotonView>();
     }
-    public float frictionCoefficient;
     private void HandleMovement()
     {
         Vector2 movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -34,39 +39,14 @@ public class PlayerControllerNetworked : Unit
         Vector2 movement = movementInput.normalized * moveSpeed * Time.fixedDeltaTime;
         Vector2 targetPosition = (Vector2)transform.position + movement;
         Vector3 targetPositionV3 = new Vector3(targetPosition.x, targetPosition.y, 0);
-
-        if ((targetPositionV3 - otherPlayer.transform.position).magnitude < distanceThreshold && distanceExceeded == true)
+        if (!IsBlocked(targetPosition))
         {
-            distanceExceeded = false;
-        }
-
-        if (!distanceExceeded)
-        {
-            if (!IsBlocked(targetPosition))
-            {
-                Move(movement);
-            }
-            else
-            {
-                movement = Vector2.zero;
-                Move(movement);
-            }
+            Move(movement);
         }
         else
         {
-            Debug.Log("Distance Exceeded");
-            stamina = stamina - staminaUsageCoefficient * Time.deltaTime;
-            if (!IsBlocked(targetPosition))
-            {
-                Move(movement);
-                TetherEffect();
-            }
-            else
-            {
-                movement = Vector2.zero;
-                Move(movement);
-                TetherEffect();
-            }
+            movement = Vector2.zero;
+            Move(movement);
         }
 
         // Apply friction if not moving
@@ -88,20 +68,16 @@ public class PlayerControllerNetworked : Unit
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         Vector2 frictionForce = -rb.velocity * frictionCoefficient;
         rb.AddForce(frictionForce);
-        otherPlayer.GetComponent<Rigidbody2D>().AddForce(-frictionForce);
     }
 
     //Friction when moving
-    public float friction2Coefficient;
     private void ApplyFriction2()
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         Vector2 frictionForce = -rb.velocity * friction2Coefficient;
         rb.AddForce(frictionForce);
-        otherPlayer.GetComponent<Rigidbody2D>().AddForce(-frictionForce);
     }
 
-    public float avoidDist;
     private bool IsBlocked(Vector2 targetPosition)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(targetPosition, avoidDist);
@@ -117,81 +93,38 @@ public class PlayerControllerNetworked : Unit
         return false; // Not blocked
     }
 
-    //Checks if the distance between the two players is greater than distance threshold
-    public void LimitMovement()
-    {
-
-        if ((transform.position - otherPlayer.transform.position).magnitude > distanceThreshold)
-        {
-            distanceExceeded = true;
-        }
-        else
-        {
-            distanceExceeded = false;
-        }
-
-    }
-
-    public float springConstant = 1.0f; // Adjust this to change the "strength" of the spring
-
-    public float tetherForceCap;
-    public void TetherEffect()
-    {
-        if (otherPlayer != null)
-        {
-            Vector2 direction = otherPlayer.transform.position - transform.position;
-            float distance = direction.magnitude;
-            Vector2 force = direction.normalized * ((distance - distanceThreshold) * (distance - distanceThreshold) * springConstant);
-
-            float forceMag = force.magnitude;
-            if (forceMag <= tetherForceCap)
-            {
-                rb.AddForce(force);
-                otherPlayer.GetComponent<Rigidbody2D>().AddForce(-force);
-            }
-
-        }
-    }
-
-    public float stamina;
-    public float exhaustDrainModifier;
-    public float moveSpeedStart;
-    public float exhaustRecoveryTime;
-    public float staminaUsageCoefficient;
-
     private bool exhausted = false;
     private bool regainingStamina = false;
-    public void HandleStamina()
-    {
-        Debug.Log(regainingStamina);
-        if (!regainingStamina)
-        {
+    //public void HandleStamina()
+    //{
+    //    if (!regainingStamina)
+    //    {
 
-            if (stamina <= 0)
-            {
-                exhausted = true;
-                moveSpeed = moveSpeedStart / exhaustDrainModifier;
-                regainingStamina = true;
-            }
-        }
-        if (regainingStamina)
-        {
-            StartCoroutine(RegainStamina());
-        }
+    //        if (stamina <= 0)
+    //        {
+    //            exhausted = true;
+    //            moveSpeed = moveSpeedStart / exhaustDrainModifier;
+    //            regainingStamina = true;
+    //        }
+    //    }
+    //    if (regainingStamina)
+    //    {
+    //        StartCoroutine(RegainStamina());
+    //    }
 
-    }
+    //}
 
-    IEnumerator RegainStamina()
-    {
-        Debug.Log("RegainingStamina");
-        yield return new WaitForSeconds(exhaustRecoveryTime);
-        exhausted = false;
-        moveSpeed = moveSpeedStart;
-        regainingStamina = false;
-        stamina = 100;
+    //IEnumerator RegainStamina()
+    //{
+    //    Debug.Log("RegainingStamina");
+    //    yield return new WaitForSeconds(exhaustRecoveryTime);
+    //    exhausted = false;
+    //    moveSpeed = moveSpeedStart;
+    //    regainingStamina = false;
+    //    stamina = 100;
 
 
-    }
+    //}
 
 
 }

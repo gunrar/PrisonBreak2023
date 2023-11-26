@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4764433443832367676}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,12 +40,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 824199648852223928}
-  - component: {fileID: 6699476908985148582}
   - component: {fileID: 5862034529605205771}
   - component: {fileID: 4270949564623652230}
   - component: {fileID: 5578804964233919297}
   - component: {fileID: 2793958014019648432}
-  m_Layer: 0
+  - component: {fileID: 8545447879369051846}
+  - component: {fileID: 126510528505954868}
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -69,32 +70,6 @@ Transform:
   - {fileID: 4764433443832367676}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6699476908985148582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4452120104401907102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5afb1b66738507543936ae1a4bc19e88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  moveSpeed: 15
-  distanceThreshold: 10
-  otherPlayer: {fileID: 0}
-  frictionCoefficient: 10
-  friction2Coefficient: 1
-  avoidDist: 0.5
-  springConstant: 10
-  tetherForceCap: 400
-  stamina: 100
-  exhaustDrainModifier: 3
-  moveSpeedStart: 0
-  exhaustRecoveryTime: 3
-  staminaUsageCoefficient: 10
 --- !u!50 &5862034529605205771
 Rigidbody2D:
   serializedVersion: 4
@@ -174,7 +149,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4452120104401907102}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2327e65a2afbc2419d99aa4c27a7058, type: 3}
   m_Name: 
@@ -205,10 +180,49 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 126510528505954868}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &8545447879369051846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4452120104401907102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8bffdf4680e844f867df2c74a28ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  moveSpeed: 5
+  stamina: 100
+  exhaustDrainModifier: 3
+  moveSpeedStart: 0
+  exhaustRecoveryTime: 3
+  staminaUsageCoefficient: 10
+  frictionCoefficient: 10
+  friction2Coefficient: 1
+  avoidDist: 0.5
+--- !u!114 &126510528505954868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4452120104401907102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &7365124278944679900
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4480973697003893887}
   - component: {fileID: 3958185110171932533}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
