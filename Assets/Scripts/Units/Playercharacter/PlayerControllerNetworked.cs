@@ -15,6 +15,7 @@ public class PlayerControllerNetworked : Unit
     public float frictionCoefficient = 10f;
     public float friction2Coefficient = 1f;
     public float avoidDist = 0.5f;
+    public float rotationSpeed = 10f;
 
 
     void FixedUpdate()
@@ -23,6 +24,7 @@ public class PlayerControllerNetworked : Unit
         {
             //HandleStamina();
             HandleMovement();
+            RotateTowardsMouse();
         }
 
     }
@@ -60,7 +62,22 @@ public class PlayerControllerNetworked : Unit
         }
     }
 
+    private void RotateTowardsMouse()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = transform.position.z; // Keep the z-coordinate unchanged
 
+        Vector2 direction = (mousePosition - transform.position).normalized;
+
+        // Calculate the angle in degrees
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Determine target rotation
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        // Rotate towards the target rotation
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+    }
 
     //Friction When not moving
     private void ApplyFriction1()

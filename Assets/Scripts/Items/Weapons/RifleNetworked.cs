@@ -1,16 +1,25 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class Rifle : WeaponController // Inherits from Weapon
+public class RifleNetworked : WeaponController // Inherits from Weapon
 {
+    PhotonView view;
     // Update is called once per frame
     public GameObject projectile; // Assign this in the editor with your bullet prefab
     public Transform tip; // Assign this in the editor to the transform of the 'tip' object
+    private void Start()
+    {
+        view = GetComponent<PhotonView>();
+    }
 
     public override void Update()
     {
-        if (Input.GetButtonDown("Fire1")) // Fire1 is the left mouse button by default
+        if (view.IsMine)
         {
-            Fire();
+            if (Input.GetButtonDown("Fire1")) // Fire1 is the left mouse button by default
+            {
+                Fire();
+            }
         }
     }
 
@@ -18,15 +27,15 @@ public class Rifle : WeaponController // Inherits from Weapon
     protected override void Fire()
     {
         // Instantiate the bullet prefab at the firing point's position and rotation
-        GameObject bulletObject = Instantiate(projectile, tip.position, tip.rotation);
-        
+        GameObject bulletObject = PhotonNetwork.Instantiate(projectile.name, tip.position, tip.rotation);
+
         // Get the Bullet script component from the new bullet instance
         Bullet bulletScript = bulletObject.GetComponent<Bullet>();
         if (bulletScript != null)
         {
 
             // Initialize the bullet's damage and speed using values from the Rifle
-            bulletScript.Initialize(damage,speed);
+            bulletScript.Initialize(damage, speed);
         }
         else
         {
