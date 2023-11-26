@@ -33,6 +33,7 @@ public class Enemy : Unit
     }
 
 
+
     public void SetWeight(float newWeight)
     {
         enemyWeight = newWeight;
@@ -40,6 +41,7 @@ public class Enemy : Unit
     }
     protected virtual void Update()
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         float distanceToPlayer = 0;
         if (playerTransform != null) { 
             distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);

@@ -15,16 +15,30 @@ public class SpawnControl : MonoBehaviour
     public Transform[] spawnPoints; // Array of spawn points
     public float spawnAreaRadius = 1f; // Radius for random variation in spawn position
     public float totalWeight; // Total weight for spawning enemies
-    public int numWaves;
+    public int totalWaves;
+
+    public bool spawnerPause = false;
+
+
+
+
+    private int numWaves = 0;
 
     private void Update()
     {
-        HandleWaves();
-        SpawnEnemiesTest();
+        if (!spawnerPause)
+        {
+            if (numWaves < totalWaves)
+            {
+                HandleWaves();
+            }
+            SpawnEnemiesTest();
+        }
     }
 
     private void SpawnEnemies(float totalWeight)
     {
+        numWaves++;
         while (totalWeight > 0)
         {
             // Randomly select an enemy type
@@ -72,14 +86,17 @@ public class SpawnControl : MonoBehaviour
 
             }
         }
+        spawnerPause = true;
+        Debug.Log("SpawnerPause");
         return false; // No enemies found within the radius
     }
 
     //Spawns next wave after waiting for wavespawndelay
     public float waveSpawnDelay;
-    private bool readyToSpawn = true;
+    public bool readyToSpawn = true;
     IEnumerator WaveSpawn()
     {
+        spawnerPause = true;
         yield return new WaitForSeconds(waveSpawnDelay);
         SpawnEnemies(totalWeight);
         totalWeight += totalWeight;

@@ -304,12 +304,12 @@ MonoBehaviour:
   moveSpeed: 6
   targetingRange: 150
   damage: 25
-  attackRange: 75
+  attackRange: 50
   attackInterval: 0
   bulletPrefab: {fileID: 867785979735934778, guid: d8e30e0495f823745a39c3a14f8d9def, type: 3}
   bulletSpeed: 100
   shootingInterval: 5
-  standoffRange: 30
+  standoffRange: 15
   enemyWeight: 0
   lastShootTime: 0
   playerTransform: {fileID: 0}
