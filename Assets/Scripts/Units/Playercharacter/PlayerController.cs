@@ -11,6 +11,7 @@ public class PlayerController : Unit
     void FixedUpdate()
     {
         LimitMovement();
+        RotateTowardsMouse();
         HandleStamina();
         HandleMovement();
                 
@@ -36,13 +37,21 @@ public class PlayerController : Unit
 
         if (!distanceExceeded)
         {
+            if (stamina < 100)
+            {
+                stamina = stamina + staminaRegenRate * Time.deltaTime;
+            }
+            if (stamina >= 100)
+            {
+                stamina = 100;
+            }
             if (!IsBlocked(targetPosition))
             {
                 Move(movement);
             }
             else
             {
-                movement = Vector2.zero;
+                stamina = stamina - staminaUsageCoefficient * Time.deltaTime;
                 Move(movement);
             }
         }
@@ -57,7 +66,7 @@ public class PlayerController : Unit
             }
             else
             {
-                movement = Vector2.zero;
+                stamina = stamina - staminaUsageCoefficient * Time.deltaTime;
                 Move(movement);
                 TetherEffect();
             }
@@ -152,18 +161,17 @@ public class PlayerController : Unit
     public float moveSpeedStart;
     public float exhaustRecoveryTime;
     public float staminaUsageCoefficient;
+    public float staminaRegenRate;
 
-    private bool exhausted = false;
     private bool regainingStamina = false;
     public void HandleStamina()
     {
-        Debug.Log(regainingStamina);
+
         if (!regainingStamina)
         {
             
             if (stamina <= 0)
             {
-                exhausted = true;
                 moveSpeed = moveSpeedStart / exhaustDrainModifier;
                 regainingStamina = true;
             }
@@ -179,12 +187,31 @@ public class PlayerController : Unit
     {
         Debug.Log("RegainingStamina");
         yield return new WaitForSeconds(exhaustRecoveryTime);
-        exhausted = false;
         moveSpeed = moveSpeedStart;
         regainingStamina = false;
         stamina = 100;
 
 
+    }
+
+    public float rotationSpeed;
+    private void RotateTowardsMouse()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = transform.position.z; // Keep the z-coordinate unchanged
+
+
+
+        Vector2 direction = (mousePosition - transform.position).normalized;
+
+        // Calculate the angle in degrees
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Determine target rotation
+        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        // Rotate towards the target rotation
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
     }
 
 

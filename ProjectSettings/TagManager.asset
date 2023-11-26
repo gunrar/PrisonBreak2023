@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HardTerrain
   - Enemy
+  - TerrainSpawnPoint
   layers:
   - Default
   - TransparentFX
