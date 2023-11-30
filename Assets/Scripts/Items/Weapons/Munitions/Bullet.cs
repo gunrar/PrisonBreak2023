@@ -12,14 +12,12 @@ public class Bullet : Munition
     // Rest of your bullet code, such as collision detection
     private void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        if (hitInfo.gameObject.CompareTag(targetTag))
+        if (hitInfo.gameObject.layer == 6)
         {
             // If it is an enemy, apply damage
             Unit target = hitInfo.GetComponent<Unit>();
             if (target != null)
             {
-                
-              
                 target.TakeDamage(bulletDamage);
             }
 

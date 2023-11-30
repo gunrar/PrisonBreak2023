@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8545447879369051846}
   - component: {fileID: 126510528505954868}
   - component: {fileID: 7569418012313314038}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
   speed: 20
   range: 0
   attackArc: 0
-  weaponTargetTag: 
+  weaponTargetTag: Player
   engineBase: {fileID: 4452120104401907102}
   projectile: {fileID: 6320027504819892100, guid: 7b7731a814af2c346a80704daa92a2ff, type: 3}
   tip: {fileID: 1520186592209463861}
@@ -245,7 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 478658148162638674}
   - component: {fileID: 4027994233729330727}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1520186592209463861}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
