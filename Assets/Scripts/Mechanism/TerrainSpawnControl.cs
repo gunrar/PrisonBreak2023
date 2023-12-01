@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Photon.Pun;
+using Photon.Realtime;
 public class TerrainSpawnController : MonoBehaviour
 {
     private GameObject[] terrainSpawnPoints;
@@ -72,7 +74,7 @@ public class TerrainSpawnController : MonoBehaviour
                     {
 
                         //TerrainObject selectedEnemyType = terrainObjects[Random.Range(0, terrainObjects.Count)];
-                        GameObject levelePiece = Instantiate(potentialTerrainObjects[z], terrainSpawnPoints[i].transform.position, Quaternion.identity);
+                        GameObject levelePiece = PhotonNetwork.Instantiate(potentialTerrainObjects[z].name, terrainSpawnPoints[i].transform.position, Quaternion.identity);
                         levelObjects.Add(levelePiece);
                     }
 

@@ -19,6 +19,7 @@ public class SpawnPlayersNetworked : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        Debug.Log("Test");
         SpawnPlayer();
     }
 
