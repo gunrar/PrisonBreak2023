@@ -11,7 +11,6 @@ public class Weapon : Item
 // It controls the weapon's behavior, like aiming and firing.
 public class WeaponController : MonoBehaviour
 {
-    public Weapon weaponData; // Assign this in the inspector, referencing a Weapon ScriptableObject.
     public float damage;
     public float speed;
     public float range;

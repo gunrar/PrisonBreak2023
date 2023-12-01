@@ -33,6 +33,7 @@ public class Enemy : Unit
     }
 
 
+
     public void SetWeight(float newWeight)
     {
         enemyWeight = newWeight;
@@ -40,10 +41,11 @@ public class Enemy : Unit
     }
     protected virtual void Update()
     {
-        
-
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        float distanceToPlayer = 0;
+        if (playerTransform != null) { 
+            distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        }
         if (distanceToPlayer <= targetingRange)
         {
             // Player within targeting range, move towards the player
