@@ -1,6 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
-
+using System.Collections;
 public class RifleNetworked : WeaponController // Inherits from Weapon
 {
     PhotonView view;
@@ -18,28 +18,40 @@ public class RifleNetworked : WeaponController // Inherits from Weapon
         {
             if (Input.GetButtonDown("Fire1")) // Fire1 is the left mouse button by default
             {
-                Fire();
+                StartCoroutine(FireRifle());
             }
         }
     }
 
-
-    protected override void Fire()
+    private bool readyToFire = true;
+    public float fireDelay;
+    IEnumerator FireRifle()
     {
-        // Instantiate the bullet prefab at the firing point's position and rotation
-        GameObject bulletObject = PhotonNetwork.Instantiate(projectile.name, tip.position, tip.rotation);
-
-        // Get the Bullet script component from the new bullet instance
-        Bullet bulletScript = bulletObject.GetComponent<Bullet>();
-        if (bulletScript != null)
+        if (readyToFire)
         {
+            readyToFire = false;
+            // Instantiate the bullet prefab at the firing point's position and rotation
+            GameObject bulletObject = PhotonNetwork.Instantiate(projectile.name, tip.position, tip.rotation);
 
-            // Initialize the bullet's damage and speed using values from the Rifle
-            bulletScript.Initialize(damage, speed);
+            // Get the Bullet script component from the new bullet instance
+            Bullet bulletScript = bulletObject.GetComponent<Bullet>();
+            if (bulletScript != null)
+            {
+
+                // Initialize the bullet's damage and speed using values from the Rifle
+                bulletScript.Initialize(damage, speed);
+            }
+            else
+            {
+                Debug.LogError("Bullet prefab does not have a Bullet script attached.");
+            }
+            yield return new WaitForSeconds(fireDelay);
+            readyToFire = true;
         }
-        else
-        {
-            Debug.LogError("Bullet prefab does not have a Bullet script attached.");
-        }
+        
+
+        
+
+        
     }
 }

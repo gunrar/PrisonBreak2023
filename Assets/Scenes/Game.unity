@@ -178,6 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 236824814}
   - component: {fileID: 236824813}
+  - component: {fileID: 236824815}
   m_Layer: 0
   m_Name: SpawnPlayers
   m_TagString: Untagged
@@ -211,13 +212,30 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236824812}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.3921944, y: 8.543538, z: 18.876867}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1663275625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &236824815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236824812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aab08ea71127daa489acf283d883be7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minX: -2
+  maxX: 2
+  minY: -2
+  maxY: 2
+  companionPrefab: {fileID: 70146136783461883, guid: 50a081a9fbed6f845813b9ea8a292b1f, type: 3}
 --- !u!1 &278397716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,6 +1201,7 @@ GameObject:
   - component: {fileID: 1663275625}
   - component: {fileID: 1663275626}
   - component: {fileID: 1663275627}
+  - component: {fileID: 1663275629}
   m_Layer: 0
   m_Name: EventHandler
   m_TagString: Untagged
@@ -1205,6 +1224,7 @@ Transform:
   m_Children:
   - {fileID: 394574981}
   - {fileID: 890329382}
+  - {fileID: 236824814}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1663275626
@@ -1257,6 +1277,23 @@ MonoBehaviour:
   - {fileID: 889722965}
   - {fileID: 524717877}
   levelObjects: []
+--- !u!114 &1663275629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663275624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf190ef29ff7574386cc9c33d3ae140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minX: -2
+  maxX: 2
+  minY: -2
+  maxY: 2
+  companionPrefab: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1264,4 +1301,3 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 293479129}
   - {fileID: 1663275625}
-  - {fileID: 236824814}

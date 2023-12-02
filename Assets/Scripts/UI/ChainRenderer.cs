@@ -22,6 +22,8 @@ public class ChainRenderer : MonoBehaviour
 
     void Update()
     {
+        startObject = transform.gameObject;
+        endObject = GetComponent<PlayerControllerNetworked>().otherPlayer;
         if (startObject != null && endObject != null)
         {
             // Update the positions of the line to match the GameObjects

@@ -19,7 +19,7 @@ public class SpawnPlayersNetworked : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        Debug.Log("Test");
+
         SpawnPlayer();
     }
 
@@ -48,6 +48,7 @@ public class SpawnPlayersNetworked : MonoBehaviourPunCallbacks
     {
         Vector2 randomPosition = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity);
+        GetComponent<CompanionManager>().SpawnCompanion(player);
         AssignPlayerColor(player);
         playerList.Add(player);
     }

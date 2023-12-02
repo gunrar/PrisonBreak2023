@@ -16,16 +16,22 @@ public class PlayerControllerNetworked : Unit
     public float friction2Coefficient = 1f;
     public float avoidDist = 0.5f;
     public float rotationSpeed = 10f;
+    public float distanceThreshold;
+    public GameObject otherPlayer;
+
+    private bool distanceExceeded = false;
 
 
     void FixedUpdate()
     {
         if (view.IsMine)
         {
-            //HandleStamina();
+            LimitMovement();
+            HandleStamina();
             HandleMovement();
             RotateTowardsMouse();
         }
+        //Debug.Log(otherPlayer = null);
 
     }
     protected override void Start()
@@ -36,29 +42,105 @@ public class PlayerControllerNetworked : Unit
     }
     private void HandleMovement()
     {
-        Vector2 movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        bool isMoving = movementInput.magnitude > 0.01f; // Check if there's significant movement input
-        Vector2 movement = movementInput.normalized * moveSpeed * Time.fixedDeltaTime;
-        Vector2 targetPosition = (Vector2)transform.position + movement;
-        Vector3 targetPositionV3 = new Vector3(targetPosition.x, targetPosition.y, 0);
-        if (!IsBlocked(targetPosition))
+        
+        if (otherPlayer != null)
         {
-            Move(movement);
+            
+
+
+            Vector2 movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            bool isMoving = movementInput.magnitude > 0.01f; // Check if there's significant movement input
+            Vector2 movement = movementInput.normalized * moveSpeed * Time.fixedDeltaTime;
+            Vector2 targetPosition = (Vector2)transform.position + movement;
+            Vector3 targetPositionV3 = new Vector3(targetPosition.x, targetPosition.y, 0);
+
+            if ((targetPositionV3 - otherPlayer.transform.position).magnitude < distanceThreshold && distanceExceeded == true)
+            {
+                distanceExceeded = false;
+            }
+
+            if (!distanceExceeded)
+            {
+                if (stamina < 100)
+                {
+                    stamina = stamina + staminaRegenRate * Time.deltaTime;
+                }
+                if (stamina >= 100)
+                {
+                    stamina = 100;
+                }
+                if (!IsBlocked(targetPosition))
+                {
+                    Move(movement);
+                }
+                else
+                {
+                    stamina = stamina - staminaUsageCoefficient * Time.deltaTime;
+                    Move(movement);
+                }
+            }
+            else
+            {
+                Debug.Log("Distance Exceeded");
+                stamina = stamina - staminaUsageCoefficient * Time.deltaTime;
+                if (!IsBlocked(targetPosition))
+                {
+                    Move(movement);
+                    TetherEffect();
+                }
+                else
+                {
+                    stamina = stamina - staminaUsageCoefficient * Time.deltaTime;
+                    Move(movement);
+                    TetherEffect();
+                }
+            }
+
+            // Apply friction if not moving
+            if (!isMoving)
+            {
+                ApplyFriction1();
+            }
+            else
+            {
+                ApplyFriction2();
+            }
+
+        }
+    }
+    public void LimitMovement()
+    {
+
+        if ((transform.position - otherPlayer.transform.position).magnitude > distanceThreshold)
+        {
+            distanceExceeded = true;
         }
         else
         {
-            movement = Vector2.zero;
-            Move(movement);
+            distanceExceeded = false;
         }
 
-        // Apply friction if not moving
-        if (!isMoving)
+    }
+
+    public float springConstant = 1.0f; // Adjust this to change the "strength" of the spring
+
+    public float tetherForceCap;
+    public void TetherEffect()
+    {
+        Debug.Log("GotHere");
+        if (otherPlayer != null)
         {
-            ApplyFriction1();
-        }
-        else
-        {
-            ApplyFriction2();
+            Vector2 direction = otherPlayer.transform.position - transform.position;
+            float distance = direction.magnitude;
+            Vector2 force = direction.normalized * ((distance - distanceThreshold) * (distance - distanceThreshold) * springConstant);
+
+            float forceMag = force.magnitude;
+            if (forceMag <= tetherForceCap)
+            {
+                rb.AddForce(force);
+                otherPlayer.GetComponent<Rigidbody2D>().AddForce(-force);
+            }
+
         }
     }
 
@@ -110,38 +192,40 @@ public class PlayerControllerNetworked : Unit
         return false; // Not blocked
     }
 
-    private bool exhausted = false;
+    public float staminaRegenRate;
+
     private bool regainingStamina = false;
-    //public void HandleStamina()
-    //{
-    //    if (!regainingStamina)
-    //    {
+    public void HandleStamina()
+    {
 
-    //        if (stamina <= 0)
-    //        {
-    //            exhausted = true;
-    //            moveSpeed = moveSpeedStart / exhaustDrainModifier;
-    //            regainingStamina = true;
-    //        }
-    //    }
-    //    if (regainingStamina)
-    //    {
-    //        StartCoroutine(RegainStamina());
-    //    }
+        if (!regainingStamina)
+        {
 
-    //}
+            if (stamina <= 0)
+            {
+                moveSpeed = moveSpeedStart / exhaustDrainModifier;
+                regainingStamina = true;
+            }
+        }
+        if (regainingStamina)
+        {
+            StartCoroutine(RegainStamina());
+        }
 
-    //IEnumerator RegainStamina()
-    //{
-    //    Debug.Log("RegainingStamina");
-    //    yield return new WaitForSeconds(exhaustRecoveryTime);
-    //    exhausted = false;
-    //    moveSpeed = moveSpeedStart;
-    //    regainingStamina = false;
-    //    stamina = 100;
+    }
+
+    IEnumerator RegainStamina()
+    {
+        Debug.Log("RegainingStamina");
+        yield return new WaitForSeconds(exhaustRecoveryTime);
+        moveSpeed = moveSpeedStart;
+        regainingStamina = false;
+        stamina = 100;
 
 
-    //}
+    }
+
+
 
 
 }

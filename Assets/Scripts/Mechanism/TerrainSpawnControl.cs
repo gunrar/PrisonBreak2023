@@ -75,6 +75,7 @@ public class TerrainSpawnController : MonoBehaviour
 
                         //TerrainObject selectedEnemyType = terrainObjects[Random.Range(0, terrainObjects.Count)];
                         GameObject levelePiece = PhotonNetwork.Instantiate(potentialTerrainObjects[z].name, terrainSpawnPoints[i].transform.position, Quaternion.identity);
+                        //GameObject levelePiece = Instantiate(potentialTerrainObjects[z], terrainSpawnPoints[i].transform.position, Quaternion.identity);
                         levelObjects.Add(levelePiece);
                     }
 
