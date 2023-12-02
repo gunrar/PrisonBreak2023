@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using Photon.Pun;
+using Photon.Realtime;
 public class Unit : MonoBehaviour
 {
     public float health = 100f;
@@ -30,6 +31,7 @@ public class Unit : MonoBehaviour
     protected virtual void Die()
     {
         // Handle death, like playing an animation, dropping loot, etc.
+        PhotonNetwork.Destroy(gameObject);
         Destroy(gameObject);
     }
 }
